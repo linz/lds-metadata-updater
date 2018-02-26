@@ -1,0 +1,17 @@
+language: python
+
+python:
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+
+branches:
+  only:
+    - development
+
+install:
+  - python setup.py install
+
+# Fails without script section
+script: echo foo
