@@ -20,6 +20,8 @@ import re
 import requests
 import logging
 import shutil
+import _locale
+_locale._getdefaultlocale = (lambda *args: ['en_US', 'utf8'])
 
 # current solution for setup.py
 try: 
@@ -115,7 +117,7 @@ def remove_illegal_chars(title):
     Removes illegal (unix + win) path chars
     """
 
-    for illegal in ['<', '>', ':', '"', '/', '\\', '|', '?', '*']: 
+    for illegal in ['<', '>', ':', '"', '/', '\\', '|', '?', '*', ',']: 
         if illegal in title:
              title = title.replace(illegal, '')
     return title
