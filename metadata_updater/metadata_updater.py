@@ -165,7 +165,6 @@ def set_metadata(layer, file, publisher):
     success = post_metadata(draft, file)
     # IMPORT DRAFT  File 
     if success:
-        layer.start_import(draft.version.id)
         add_to_pub_group(publisher, draft)
 
 def get_draft(layer):
