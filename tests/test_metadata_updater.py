@@ -11,7 +11,7 @@ class TestMetadataUpdaterHasText(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super(TestMetadataUpdaterHasText, self).__init__(*args, **kwargs)
-        self.file = '/home/splanzer/git/lds-metadata-updater/tests/data/weed-kelp-polygons-hydro-14k-122k.iso.xml'
+        self.file = os.path.join(os.getcwd(), 'data/weed-kelp-polygons-hydro-14k-122k.iso.xml')
 
     def test_file_has_text_true(self):
         """
@@ -29,7 +29,7 @@ class TestMetadataUpdaterHasText(unittest.TestCase):
         Test 'file_has_text' method returns False
         when search text not present in file
         """
-        
+
         search_text = 'Gore'
         ignore_case = True
         result = metadata_updater.file_has_text(search_text, ignore_case, self.file)
@@ -96,7 +96,7 @@ class TestMetadataUpdaterUpdFile(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super(TestMetadataUpdaterUpdFile, self).__init__(*args, **kwargs)
-        self.file = '/home/splanzer/git/lds-metadata-updater/tests/data/weed-kelp-polygons-hydro-14k-122k.iso.xml'
+        self.file =  os.path.join(os.getcwd(), 'data/weed-kelp-polygons-hydro-14k-122k.iso.xml')
 
     def setUp(self):
         """
@@ -140,7 +140,7 @@ class TestMetadataUpdaterUpdFile(unittest.TestCase):
         4. Test the string "Kelp" (capitalised version) is not present
         5. Test the string "kelp" (all lower case version) is present
         """
-        
+
         # Ensure the word "Kelp" is present
         result = metadata_updater.file_has_text('kelp', False, self.file)
         self.assertTrue(result)
@@ -159,7 +159,7 @@ class TestMetadataUpdaterBakFile(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super(TestMetadataUpdaterBakFile, self).__init__(*args, **kwargs)
-        self.file = '/home/splanzer/git/lds-metadata-updater/tests/data/weed-kelp-polygons-hydro-14k-122k.iso.xml'
+        self.file = os.path.join(os.getcwd(), 'data/weed-kelp-polygons-hydro-14k-122k.iso.xml')
 
     def tearDown(self):
         """
@@ -182,7 +182,7 @@ class TestMetadataUpdaterSelectiveLayers(unittest.TestCase):
         Test method 'iterate_selective' return an 
         generator object
         """
-        
+
         gen = metadata_updater.iterate_selective([123, 456, 789])
         self.assertIsInstance(gen, types.GeneratorType)
 
@@ -191,7 +191,7 @@ class TestMetadataUpdaterSelectiveLayers(unittest.TestCase):
         Test the iterate_selective generator 
         returns all expected values
         """
-        
+
         gen = metadata_updater.iterate_selective([123, 456, 789])
         self.assertEqual(list(gen), [123, 456, 789])
 
