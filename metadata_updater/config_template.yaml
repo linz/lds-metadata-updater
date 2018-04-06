@@ -17,7 +17,7 @@ Text:
        ignore_case: True                # True or False. If True, search text case is ignored 
     2: 
        search: Land Info New Zealand
-       replace: Land Information New Zealand
+       replace: Land Information Aoteroa
        ignore_case: True
 
 Output:
@@ -32,7 +32,7 @@ Datasets:
   Docs:                                 # Documents are not currently supported 
 
 Test:
-  Dry_run: False                        # True or False
+  Dry_run: True                        # True or False
                                         # If True, metadata xml documents are
                                         # edited and stored but no changes to the
                                         # Data Service made 

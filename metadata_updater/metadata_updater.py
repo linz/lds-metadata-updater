@@ -38,14 +38,15 @@ class ConfigReader():
     be passed to the scripts methods
     """
 
-    def __init__(self):
+    def __init__(self, cwd = None):
         # READ CONFIG
         
         # get config path
-        cwd = os.getcwd()
-        regex = re.compile(r'(\\|\/)(metadata_updater)$')
-        cwd = regex.sub('', cwd)
-        cwd = os.path.join(os.sep, cwd, 'metadata_updater', 'config.yaml')
+        if not cwd:
+            cwd = os.getcwd()
+            regex = re.compile(r'(\\|\/)(metadata_updater)$')
+            cwd = regex.sub('', cwd)
+            cwd = os.path.join(os.sep, cwd, 'metadata_updater', 'config.yaml')
 
         with open(cwd, 'r') as f:
             config = yaml.load(f)
@@ -245,7 +246,7 @@ def update_set():
     """
     pass
 
-def iterate_all(client, config):
+def iterate_all(client):
     """
     Iterate through the entire Data Service catalog.
     Returns a generator of all layer / table ids
@@ -259,13 +260,13 @@ def iterate_all(client, config):
             logger.warning('Dataset {0}: Data is of "{1}" type. \
             This process only handles tables/layers'.format(item.id, type(item)))
 
-def iterate_selective(config): 
+def iterate_selective(layers): 
     """
     Iterate through user supplied (via config.yaml)
     dataset IDs. Returns a generator of layer ids to process
     """
 
-    for layer_id in config.layers:
+    for layer_id in layers:
         yield layer_id
 
 def file_has_text(search_text, ignore_case, file):
@@ -285,11 +286,11 @@ def file_has_text(search_text, ignore_case, file):
                 return True
         return False
 
-def create_backup(file, config):
+def create_backup(file, overwrite=False):
     """
     Create backup of metadata file to be edited
     """
-    if config.test_overwrite:
+    if overwrite:
         file_exists(file+'._bak')
 
     shutil.copyfile(file, file+'._bak')
@@ -329,7 +330,7 @@ def main():
     if config.layers in ('ALL', 'all', 'All'):
         layer_ids = iterate_all(client, config)
     else: 
-        layer_ids = iterate_selective(config)
+        layer_ids = iterate_selective(config.layers)
 
     for layer_id in layer_ids:
         layer_count += 1
@@ -358,7 +359,7 @@ def main():
                 layers_edited_count +=1
                 # Only creating a backup if the original is edited 
                 if not backup_created:
-                    create_backup(file, config)
+                    create_backup(file, config.test_overwrite)
                     backup_created = True
                 update_metadata(file, mapping[i])
 
