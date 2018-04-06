@@ -14,4 +14,4 @@ install:
 # Fails without script section
 script: 
   - cd $TRAVIS_BUILD_DIR/tests
-  - python3 /test_metadata_updater.py
+  - python3 test_metadata_updater.py
