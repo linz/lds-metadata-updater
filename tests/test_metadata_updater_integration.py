@@ -19,11 +19,6 @@ class TestMetadataUpdaterUpdFile(unittest.TestCase):
         """
         conf_file = os.path.join(os.getcwd(), 'data/config.yaml')
         self.config =  metadata_updater.ConfigReader(conf_file)
-        
-    def tearDown(self):
-        """
-        """
-        pass
 
     def get_client(self):
         """
@@ -134,5 +129,5 @@ class TestMetadataUpdaterUpdFile(unittest.TestCase):
         all = metadata_updater.iterate_all(client)
         self.assertIsInstance(all, types.GeneratorType)
 
-
-#         # REMOVE LINES
+if __name__ == '__main__':
+    unittest.main()
