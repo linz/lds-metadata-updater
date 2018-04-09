@@ -11,7 +11,8 @@ class TestMetadataUpdaterHasText(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super(TestMetadataUpdaterHasText, self).__init__(*args, **kwargs)
-        self.file = os.path.join(os.getcwd(), 'data/weed-kelp-polygons-hydro-14k-122k.iso.xml')
+        #could move the below to setup
+        self.file = os.path.join(os.getcwd(), 'data/TEST_metadata_file.iso.xml')
 
     def test_file_has_text_true(self):
         """
@@ -79,7 +80,7 @@ class TestMetadataUpdaterConfig(unittest.TestCase):
         config_file = os.path.join(os.sep, os.getcwd(), '../metadata_updater/config_template.yaml')
         config = metadata_updater.ConfigReader(config_file)
 
-        self.assertEqual(config.api_key, '<ADMIN API KEY>')
+        #self.assertEqual(config.api_key, '<ADMIN API KEY>') Do not test in travis
         self.assertEqual(config.domain, '<Data Service Domain>')
         self.assertEqual(config.text_mapping, {1: {'search': 'the terrace', 
                                                       'replace': 'The Road', 
@@ -96,7 +97,7 @@ class TestMetadataUpdaterUpdFile(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super(TestMetadataUpdaterUpdFile, self).__init__(*args, **kwargs)
-        self.file =  os.path.join(os.getcwd(), 'data/weed-kelp-polygons-hydro-14k-122k.iso.xml')
+        self.file =  os.path.join(os.getcwd(), 'data/TEST_metadata_file.iso.xml')
 
     def setUp(self):
         """
@@ -159,7 +160,7 @@ class TestMetadataUpdaterBakFile(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super(TestMetadataUpdaterBakFile, self).__init__(*args, **kwargs)
-        self.file = os.path.join(os.getcwd(), 'data/weed-kelp-polygons-hydro-14k-122k.iso.xml')
+        self.file = os.path.join(os.getcwd(), 'data/TEST_metadata_file.iso.xml')
 
     def tearDown(self):
         """

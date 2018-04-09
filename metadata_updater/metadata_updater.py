@@ -123,17 +123,17 @@ def remove_illegal_chars(title):
              title = title.replace(illegal, '')
     return title
 
-def get_metadata(layer, config):
+def get_metadata(layer, dir, overwrite):
     """
     Download the layers metadata file
     """
 
     title = remove_illegal_chars(layer.title)
-    file_destination = os.path.join(config.destination_dir,'{0}_{1}_{2}.iso.xml'.format(layer.type,
+    file_destination = os.path.join(dir,'{0}_{1}_{2}.iso.xml'.format(layer.type,
                                                                                         layer.id, 
                                                                                         title))
 
-    if config.test_overwrite:
+    if overwrite:
         file_exists(file_destination)
         layer.metadata.get_xml(file_destination)
     return file_destination
@@ -232,19 +232,19 @@ def get_layer(client, id):
     except koordinates.exceptions.ServerError as e:
         logger.critical('{0}'.format(e))
         ERRORS += 1
-
-def update_doc():
-    """ 
-    TODO// Due to the current small number of CC licensed
-    documents this is out of scope 
-    """
-    pass
-
-def update_set():
-    """ 
-    TODO// Currently out of development scope
-    """
-    pass
+# 
+# def update_doc():
+#     """ 
+#     TODO// Due to the current small number of CC licensed
+#     documents this is out of scope 
+#     """
+#     pass
+# 
+# def update_set():
+#     """ 
+#     TODO// Currently out of development scope
+#     """
+#     pass
 
 def iterate_all(client):
     """
@@ -295,6 +295,12 @@ def create_backup(file, overwrite=False):
 
     shutil.copyfile(file, file+'._bak')
 
+def get_client(domain, api_key):
+    """
+    Return Koordinates API client
+    """
+    
+    return koordinates.Client(domain, api_key)
 
 def main():
     """
@@ -319,7 +325,7 @@ def main():
     # CREATE DATA OUT DIR
     os.makedirs(config.destination_dir, exist_ok = True) 
     # API CLIENT
-    client = koordinates.Client(config.domain, config.api_key)
+    client = self.get_client(config.domain, config.api_key)
     # PUBLISHER
     publisher = koordinates.Publish()
 
@@ -349,7 +355,7 @@ def main():
             continue
 
         # GET METADATA
-        file = get_metadata(layer, config)
+        file = get_metadata(layer, config.destination_dir, config.test_overwrite)
 
         # TEST IF SEARCH TEXT IN FILE (IN ORDER OF PRIORITY)
         text_found, backup_created = False, False

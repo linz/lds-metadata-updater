@@ -1,17 +1,21 @@
 language: python
 
 python:
-  - "3.5"
-  - "3.6"
+- '3.5'
+- '3.6'
 
 branches:
   only:
-    - development
+  - development
 
 install:
-  - python3 setup.py install
+- python3 setup.py install
 
-# Fails without script section
-script: 
-  - cd $TRAVIS_BUILD_DIR/tests
-  - python3 test_metadata_updater.py
+script:
+- cd $TRAVIS_BUILD_DIR/tests
+- python3 test_metadata_updater.py
+- python3 test_metadata_updater_integration.py
+
+env:
+  matrix:
+    secure: iCFeNgLBavDroNEVSOdH9L6lW9J0AWMtznbnETz18nD0yXOdLliDH79/36/FRLx+e+X2wHRFYtoFalN3cqX/0FoyG/neDV7/2PcCtDfWGe28UXYru79aNjIcBfLDjSZLwTrGsEzu/EmMhIIK6W+aJa7SfvfPMTW/iAYEFeAnK/3NGdeKVzCcD2oXLFyG6FYVUDefpL0QUpMVPzd2siqXQnYae6hJlanEmq8UpbzuJpnQXgOj6NUUPmuwTODe80p0aJ1cBdAbyL3e/St9t1S4qURkpHcPux1UknGGfR5C+WLRS1mhD/uBIOfJnkIgs7UqiPh9iieZyjUKzlKJeAizu4MUGG0mHLI1DkH0LkGN8AxRI7jX4iYxfH0U73qGZFIwAHD/q1v2Bkn4Pps7wOc6EsX2zjk2eyp0DgGQywMOj8FBZ6CigbQvjNfzPvs0HA71WANT14q4eZ3iRhadmMilJ47tV02eCrZ2ZaNLb8TAmBx30wTCANr5pM4NMKcTlt6c1A/VfvK/Fat7TY4W3LtLAMioDQy1e/cvNYB1Ypalfs3t88JvvPYcdfTDldMmsJk1CU6GDHe1EzSmyObG5v7WaN+qov4CsDAdZjwrKI9lPCP3oYAOTRWbxU7ta/NSAX1qijkBNmxCKV3lE/xmF04oC9tIL3kLCE1fjlpygnuoGOo=
