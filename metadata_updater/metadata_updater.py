@@ -325,7 +325,7 @@ def main():
     # CREATE DATA OUT DIR
     os.makedirs(config.destination_dir, exist_ok = True) 
     # API CLIENT
-    client = self.get_client(config.domain, config.api_key)
+    client = get_client(config.domain, config.api_key)
     # PUBLISHER
     publisher = koordinates.Publish()
 
