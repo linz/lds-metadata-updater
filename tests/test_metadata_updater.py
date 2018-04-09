@@ -148,6 +148,7 @@ class TestMetadataUpdaterUpdFile(unittest.TestCase):
         result = metadata_updater.file_has_text('Kelp', False, self.file)
         self.assertTrue(result)
         # Remove the word "Kelp" (capitalised)
+        mapping = {'replace': '', 'ignore_case': False, 'search': 'Kelp'}
         metadata_updater.update_metadata(self.file, mapping)
         # Ensure the word "Kelp" is not present
         result = metadata_updater.file_has_text('kelp', False, self.file)
