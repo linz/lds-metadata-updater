@@ -5,9 +5,11 @@ import sys
 import os
 import shutil
 import types
+import logging
 
 sys.path.append('../')  
 from metadata_updater import metadata_updater
+from metadata_updater import log
 
 class TestMetadataUpdaterHasText(unittest.TestCase):
 
@@ -197,6 +199,19 @@ class TestMetadataUpdaterSelectiveLayers(unittest.TestCase):
 
         gen = metadata_updater.iterate_selective([123, 456, 789])
         self.assertEqual(list(gen), [123, 456, 789])
+
+class TestMetadataLog(unittest.TestCase):
+    """
+    Log Tests
+    """
+    
+    def test_log(self):
+        """
+        test a logging instance is returned 
+        """
+
+        logger = log.conf_logging('root')
+        self.assertIsInstance(logger, logging.Logger)
 
 if __name__ == '__main__':
     unittest.main()
