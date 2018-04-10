@@ -27,7 +27,7 @@ class TestMetadataUpdaterUpdFile(unittest.TestCase):
         Non test.
         Returns koordinates api client instance
         """
- 
+
         return metadata_updater.get_client(self.config.domain, self.config.api_key)
 # 
 #     def get_layer(self, client, layer_id):
