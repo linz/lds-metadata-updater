@@ -6,10 +6,14 @@ import os
 import shutil
 import types
 import logging
+import argparse
 
 sys.path.append('../')  
 from metadata_updater import metadata_updater
 from metadata_updater import log
+
+# These tests make no API calls but rely on data in the
+# /test/data dir
 
 class TestMetadataUpdaterHasText(unittest.TestCase):
 
@@ -84,7 +88,7 @@ class TestMetadataUpdaterConfig(unittest.TestCase):
         config_file = os.path.join(os.sep, os.getcwd(), '../metadata_updater/config_template.yaml')
         config = metadata_updater.ConfigReader(config_file)
 
-        #self.assertEqual(config.api_key, '<ADMIN API KEY>') Do not test in travis
+        #self.assertEqual(config.api_key, '<ADMIN API KEY>') not tested in travis
         self.assertEqual(config.domain, '<Data Service Domain>')
         self.assertEqual(config.text_mapping, {1: {'search': 'the terrace', 
                                                       'replace': 'The Road', 
@@ -96,6 +100,10 @@ class TestMetadataUpdaterConfig(unittest.TestCase):
         self.assertEqual(config.layers, '<Layers to Process>')
         self.assertEqual(config.test_dry_run, True)
         self.assertEqual(config.test_overwrite,True)
+
+    def test_config_get_cwd(self):
+        self.assertRaises(FileNotFoundError, metadata_updater.ConfigReader, None)
+
 
 class TestMetadataUpdaterUpdFile(unittest.TestCase):
 

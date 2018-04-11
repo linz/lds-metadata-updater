@@ -20,6 +20,7 @@ import re
 import requests
 import logging
 import shutil
+import argparse
 import _locale
 _locale._getdefaultlocale = (lambda *args: ['en_US', 'utf8'])
 
@@ -40,13 +41,17 @@ class ConfigReader():
 
     def __init__(self, cwd = None):
         # READ CONFIG
-        
+
         # get config path
         if not cwd:
             cwd = os.getcwd()
             regex = re.compile(r'(\\|\/)(metadata_updater)$')
             cwd = regex.sub('', cwd)
             cwd = os.path.join(os.sep, cwd, 'metadata_updater', 'config.yaml')
+        
+        #check config exists
+        if not os.path.exists(cwd):
+            raise FileNotFoundError('Can not find config file')
 
         with open(cwd, 'r') as f:
             config = yaml.load(f)
@@ -257,9 +262,12 @@ def iterate_all(client):
         if type(item) == type(koordinates.layers.Layer()):
             yield item.id
         else:
-            logger.warning('Dataset {0}: Data is of "{1}" type. \
-            This process only handles tables/layers'.format(item.id, type(item)))
-
+            try:
+                logger.warning('Dataset {0}: Data is of "{1}" type. \
+                This process only handles tables/layers'.format(item.id, type(item)))
+            except:
+                pass
+            
 def iterate_selective(layers): 
     """
     Iterate through user supplied (via config.yaml)
@@ -302,6 +310,14 @@ def get_client(domain, api_key):
     
     return koordinates.Client(domain, api_key)
 
+def parse_args(args):
+    cli_parser = argparse.ArgumentParser()
+    cli_parser.add_argument('--config_file', 
+                            default=None,
+                            nargs='?',
+                            help="Path to config file")
+    return cli_parser.parse_args()
+
 def main():
     """
     Script for updating LDS Metadata. Written for the purpose
@@ -310,8 +326,12 @@ def main():
     """
 
     global ERRORS
+
+    cli_parser = parse_args(sys.argv[1:])
+    config_file = cli_parser.config_file
+
     layer_count, layers_edited_count = 0,0
-    
+
     # CONFIG LOGGING
     log.conf_logging('root')
 
@@ -320,7 +340,7 @@ def main():
         raise SystemExit('Error, Python interpreter must be 3.3 or higher')
 
     # READ CONFIG IN
-    config = ConfigReader()
+    config = ConfigReader(config_file)
     mapping = config.text_mapping
     # CREATE DATA OUT DIR
     os.makedirs(config.destination_dir, exist_ok = True) 
@@ -401,4 +421,4 @@ def main():
         logger.info('COMPLETE. No errors')
 
 if __name__ == "__main__":
-    main()
+    main() 

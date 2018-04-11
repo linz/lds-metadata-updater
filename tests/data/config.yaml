@@ -8,8 +8,8 @@ Connection:
 Text:
   Mapping:                               
     1: 
-       search: S-57
-       replace: S-57000000
+       search: Seaweed
+       replace: Sea plants
        ignore_case: True
     2: 
        search: Land InforMAtion New Zealand

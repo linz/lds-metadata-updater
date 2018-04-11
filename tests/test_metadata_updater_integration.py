@@ -5,6 +5,7 @@ import koordinates
 import os
 import sys
 import types
+import re
 
 sys.path.append('../')  
 from metadata_updater import metadata_updater
@@ -13,14 +14,15 @@ class TestMetadataUpdaterUpdFile(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super(TestMetadataUpdaterUpdFile, self).__init__(*args, **kwargs)
-        self.file =  os.path.join(os.getcwd(), 'data/weed-kelp-polygons-hydro-14k-122k.iso.xml')
 
     def setUp(self):
         """
 
         """
+
         conf_file = os.path.join(os.getcwd(), 'data/config.yaml')
-        self.config =  metadata_updater.ConfigReader(conf_file)
+        self.config = metadata_updater.ConfigReader(conf_file)
+        self.lds_test_layer = '95322'
 
     def get_client(self):
         """
@@ -29,31 +31,6 @@ class TestMetadataUpdaterUpdFile(unittest.TestCase):
         """
 
         return metadata_updater.get_client(self.config.domain, self.config.api_key)
-# 
-#     def get_layer(self, client, layer_id):
-#         """
-#         Non test.
-#         Returns koordinates api client lib layer instance
-#         """
-# 
-#         return metadata_updater.get_layer(client, layer_id) 
-# 
-# 
-#     def get_metadata(self, layer, dir, overwrite):
-#         """
-#         Non test.
-#         Returns koordinates api metadata instance
-#         """
-# 
-#         return metadata_updater.get_metadata(layer, dir, overwrite)
-# 
-#     def get_draft(self, layer):
-#         """
-#         Non test.
-#         Returns koordinates api client draft instance
-#         """
-# 
-#         return metadata_updater.get_draft(layer)
 
     def test_get_client(self):
         """
@@ -71,7 +48,7 @@ class TestMetadataUpdaterUpdFile(unittest.TestCase):
         2. Get layer        
         """
         
-        client = self.get_client()        
+        client = self.get_client()
         layer_id = self.config.layers[0]
         layer = metadata_updater.get_layer(client, layer_id)
         self.assertIsInstance(layer, koordinates.layers.Layer)
@@ -91,8 +68,8 @@ class TestMetadataUpdaterUpdFile(unittest.TestCase):
         distination_dir = os.path.join(os.getcwd(), self.config.destination_dir)
         test_overwrite = self.config.test_overwrite
         metadata_file = metadata_updater.get_metadata(layer, distination_dir, test_overwrite)
-        result = self.assertTrue(os.path.isfile(metadata_file))
-        if result: os.remove(metadata_file) 
+        self.assertTrue(os.path.isfile(metadata_file))
+        os.remove(metadata_file) 
 
     def test_update_metadata(self):
         """
@@ -103,7 +80,7 @@ class TestMetadataUpdaterUpdFile(unittest.TestCase):
         edit. check it has been edited
         and then revert chnages for next test
         """
-        pass        
+        pass
 
     def test_get_draft(self):
         """
@@ -130,6 +107,66 @@ class TestMetadataUpdaterUpdFile(unittest.TestCase):
         client = self.get_client()
         all = metadata_updater.iterate_all(client)
         self.assertIsInstance(all, types.GeneratorType)
+        # The below results in v. slow tests
+        self.assertTrue(len(list(all))>0)
+
+    def test_add_to_pub_group(self):
+        """
+        Test getting of metadata
+        1. Get client
+        2. Get pub instance
+        3. Get layer
+        4. Get Draft
+        5. Add to pub group
+        """
+
+        client = self.get_client()
+        publisher = koordinates.Publish()
+        layer = metadata_updater.get_layer(client, self.lds_test_layer)
+        draft = metadata_updater.get_draft(layer)
+        metadata_updater.add_to_pub_group(publisher, draft)
+        regex = re.compile('https:\/\/data.linz.*{0}\/versions\/[0-9]*\/'.format(self.lds_test_layer))
+        self.assertRegex(publisher.items[0], regex)
+    
+    def test_post_metadata(self):
+        """
+        Test getting of meta data
+        1. Get client
+        2. Get layer
+        3. Get Matadata
+        4. post unedited file back
+        4. Remove file (Clean up)
+        """
+
+        client = self.get_client()
+        layer = metadata_updater.get_layer(client, self.lds_test_layer)
+        draft = metadata_updater.get_draft(layer)
+        distination_dir = os.path.join(os.getcwd(), self.config.destination_dir)
+        test_overwrite = self.config.test_overwrite
+        metadata_file = metadata_updater.get_metadata(layer, distination_dir, test_overwrite)
+        result = metadata_updater.post_metadata(draft, metadata_file)
+        self.assertTrue(result)
+        os.remove(metadata_file)
+    
+    def test_set_metadata(self):
+        """
+        1. Get Client
+        2. Get Publisher
+        3. Get Layer
+        4. Get Draft
+        5. Set metadata
+        6. Check draft is in pub group
+        """
+
+        client = self.get_client()
+        publisher = koordinates.Publish()
+        layer = metadata_updater.get_layer(client, self.lds_test_layer)
+        distination_dir = os.path.join(os.getcwd(), self.config.destination_dir)
+        test_overwrite = self.config.test_overwrite
+        metadata_file = metadata_updater.get_metadata(layer, distination_dir, test_overwrite)
+        metadata_updater.set_metadata(layer, metadata_file, publisher)
+        regex = re.compile('https:\/\/data.linz.*{0}\/versions\/[0-9]*\/'.format(self.lds_test_layer))
+        self.assertRegex(publisher.items[0], regex)
 
 if __name__ == '__main__':
     unittest.main()
