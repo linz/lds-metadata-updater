@@ -119,7 +119,6 @@ class TestMetadataUpdaterUpdFile(unittest.TestCase):
         """
         
         shutil.copyfile(self.file, self.file+'._bak')
-
     def tearDown(self):
         """
         Remove edited file and reinstate original via backup
