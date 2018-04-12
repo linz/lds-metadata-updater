@@ -167,22 +167,50 @@ def set_metadata(layer, file, publisher):
 
     # GET A DRAFT VERSION OF THE LAYER
     draft = get_draft(layer)
+    if not draft:
+        return False
     # UPDATE METADATA
     success = post_metadata(draft, file)
     # IMPORT DRAFT  File 
     if success:
         add_to_pub_group(publisher, draft)
+    return success
+
+def delete_draft(layer, version):
+    """
+    Delete a draft version 
+    """
+
+    layer.delete_version(version)
+    logger.info('A draft already exists for {0}. This draft ' \
+                'was deleted and a new one created '.format(layer.id))
 
 def get_draft(layer):
     """
     If no draft exists, create one. 
     Else return the current draft. 
     """
+    global ERRORS
 
-    if not draft_exists(layer):    
+    if not draft_exists(layer):
+        # Create new draft
         draft = layer.create_draft_version()
-    else:
-        draft = layer.get_draft_version()
+        return draft
+    # A draft already exists for the layer
+    draft = layer.get_draft_version()
+    if hasattr(draft, 'active_publish'):
+        if draft.active_publish:
+            # and someone has attempted to publish it
+            #TODO // automate deletion of publish group and then draft
+            ERRORS += 1
+            logger.critical('A draft already exists for {0} and is in a ' \
+                            'publish group. THIS HAS NOT BEEN UPDATED '.format(layer.id))
+            return None
+        else:
+            delete_draft(layer, draft.version)
+    else:   #A draft exists but we know nothing of its state/ history
+        delete_draft(layer, draft.version)
+    draft = layer.create_draft_version()
     return draft
 
 def draft_exists(layer):
@@ -382,7 +410,6 @@ def main():
         for i in range(1,len(mapping)+1):
             if file_has_text(mapping[i]['search'], mapping[i]['ignore_case'], file):
                 text_found = True
-                layers_edited_count +=1
                 # Only creating a backup if the original is edited 
                 if not backup_created:
                     create_backup(file, config.test_overwrite)
@@ -397,7 +424,9 @@ def main():
             # i.e Do not update data service metadata
             continue
 
-        set_metadata(layer, file, publisher)
+        if set_metadata(layer, file, publisher):
+            layers_edited_count +=1
+
 
     # PUBLISH
     if layers_edited_count > 0 and not config.test_dry_run:
