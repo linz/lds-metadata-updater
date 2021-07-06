@@ -397,7 +397,7 @@ def main():
 
     # ITERATE OVER LAYERS
     if config.layers in ('ALL', 'all', 'All'):
-        layer_ids = iterate_all(client, config)
+        layer_ids = iterate_all(client)
     else: 
         layer_ids = iterate_selective(config.layers)
 
