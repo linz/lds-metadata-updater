@@ -140,8 +140,12 @@ def get_metadata(layer, dir, overwrite):
 
     if overwrite:
         file_exists(file_destination)
+
+    if layer.metadata != None:
         layer.metadata.get_xml(file_destination)
-    return file_destination
+        return file_destination
+    else:
+        return None
 
 def update_metadata(dest_file, mapping):
     """
@@ -419,6 +423,10 @@ def main():
 
         # GET METADATA
         file = get_metadata(layer, config.destination_dir, config.test_overwrite)
+        if not file:
+            ERRORS +=1
+            logger.critical('Failed to get metadata from layer {0}. THIS LAYER HAS NOT BEEN PROCESSED'. format(layer_id))
+            continue
 
         # TEST IF SEARCH TEXT IN FILE (IN ORDER OF PRIORITY)
         text_found, backup_created = False, False
