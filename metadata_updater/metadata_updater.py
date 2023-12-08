@@ -11,17 +11,18 @@
 #
 ################################################################################
 
-import koordinates
-import os
-import sys
-import fileinput
-import yaml
-import re
-import requests
-import logging
-import shutil
 import argparse
+import fileinput
+import logging
+import os
+import re
+import shutil
+import sys
 import _locale
+import koordinates
+import requests
+import yaml
+
 _locale._getdefaultlocale = (lambda *args: ['en_US', 'utf8'])
 
 # current solution for setup.py
@@ -54,7 +55,7 @@ class ConfigReader():
             raise FileNotFoundError('Can not find config file')
 
         with open(cwd, 'r') as f:
-            config = yaml.safe_load(f)
+            config = yaml.load(f, Loader=yaml.Loader)
 
         # CONNECTION
         if 'Connection' in config:
@@ -140,8 +141,14 @@ def get_metadata(layer, dir, overwrite):
 
     if overwrite:
         file_exists(file_destination)
-        layer.metadata.get_xml(file_destination)
-    return file_destination
+        try:
+            layer.metadata.get_xml(file_destination)
+            return file_destination
+        except:
+            print("No Metadata Found for: ", layer)
+ 
+
+    
 
 def update_metadata(dest_file, mapping):
     """
@@ -326,16 +333,18 @@ def file_has_text(search_text, ignore_case, file):
     Because there is no point updating and posting a file
     if there are no changes to be made.
     """
-
-    with open(file, 'r') as f:
-        for line in f:
-            if ignore_case:
-                match = re.search(search_text, line, flags=re.IGNORECASE)
-            else:
-                match = re.search(search_text, line)
-            if match:
-                return True
-        return False
+    try:
+        with open(file, 'r') as f:
+            for line in f:
+                if ignore_case:
+                    match = re.search(search_text, line, flags=re.IGNORECASE)
+                else:
+                    match = re.search(search_text, line)
+                if match:
+                    return True
+            return False
+    except:
+        print("No File found")
 
 def create_backup(file, overwrite=False):
     """
