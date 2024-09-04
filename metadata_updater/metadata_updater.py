@@ -54,7 +54,7 @@ class ConfigReader():
             raise FileNotFoundError('Can not find config file')
 
         with open(cwd, 'r') as f:
-            config = yaml.safe_load(f)
+            config = yaml.load(f, Loader=yaml.Loader)
 
         # CONNECTION
         if 'Connection' in config:
@@ -142,10 +142,12 @@ def get_metadata(layer, dir, overwrite):
         file_exists(file_destination)
 
     if layer.metadata != None:
-        layer.metadata.get_xml(file_destination)
-        return file_destination
-    else:
-        return None
+        try:
+            layer.metadata.get_xml(file_destination)
+            return file_destination
+        except:
+            print("No Metadata Found for: ", layer)
+
 
 def update_metadata(dest_file, mapping):
     """
@@ -154,7 +156,7 @@ def update_metadata(dest_file, mapping):
     Note. back up taken of the original file
     """
 
-    with fileinput.FileInput(dest_file, inplace=True) as file:
+    with fileinput.FileInput(dest_file, inplace=True, encoding='utf-8') as file:
         for line in file:
             if mapping['ignore_case']:
                 line = re.sub(mapping['search'], mapping['replace'], line.rstrip(), flags=re.IGNORECASE)
@@ -331,15 +333,18 @@ def file_has_text(search_text, ignore_case, file):
     if there are no changes to be made.
     """
 
-    with open(file, 'r') as f:
-        for line in f:
-            if ignore_case:
-                match = re.search(search_text, line, flags=re.IGNORECASE)
-            else:
-                match = re.search(search_text, line)
-            if match:
-                return True
-        return False
+    try:
+        with open(file, 'r') as f:
+            for line in f:
+                if ignore_case:
+                    match = re.search(search_text, line, flags=re.IGNORECASE)
+                else:
+                    match = re.search(search_text, line)
+                if match:
+                    return True
+            return False
+    except: 
+        print("No file found")
 
 def create_backup(file, overwrite=False):
     """
