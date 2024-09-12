@@ -5,10 +5,9 @@ import unittest
 import test_metadata_updater
 import test_metadata_updater_integration
 
-
 # initialize the test suite
 loader = unittest.TestLoader()
-suite  = unittest.TestSuite()
+suite = unittest.TestSuite()
 
 # add tests to the test suite
 suite.addTests(loader.loadTestsFromModule(test_metadata_updater))
@@ -21,7 +20,7 @@ runner = unittest.TextTestRunner(verbosity=3)
 result = runner.run(suite)
 
 # Return a useful exit code
-if result.wasSuccessful(): 
+if result.wasSuccessful():
     exit(0)
 else:
     exit(1)
