@@ -1,0 +1,38 @@
+# Configuration file for pre-commit (https://pre-commit.com/)
+# Please run `poetry run pre-commit run --all-files` when adding or changing entries.
+
+repos:
+  - repo: local
+    hooks:
+      - id: black
+        name: black
+        entry: black
+        language: system
+        stages: [commit]
+        types: [python]
+
+      - id: isort
+        name: isort
+        entry: isort
+        language: system
+        stages: [commit]
+        types: [python]
+
+      # REDACTED AS MULTIPLE CHANGES REQUIRED TO MAKE WORK
+      # - id: mypy
+      #   name: mypy
+      #   entry: mypy
+      #   args: [--no-incremental]
+      #   language: system
+      #   stages: [commit]
+      #   types: [python]
+      #   require_serial: true
+
+      # REDACTED AS MULTIPLE CHANGES REQUIRED TO MAKE WORK
+      # - id: pylint
+      #   name: pylint
+      #   entry: pylint
+      #   language: system
+      #   stages: [commit]
+      #   types: [python]
+      #   require_serial: true
