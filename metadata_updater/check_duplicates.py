@@ -5,8 +5,8 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 
-output_dir = 'C:/Users/ECheng/OneDrive - Land Information New Zealand/Desktop/Repo/Output' 
-files = [os.path.join(output_dir, f) for f in os.listdir(output_dir) if f.endswith('.iso.xml')]  # get a list of all .iso files in the Output directory
+input_metadata_dir  = 'C:/Users/ECheng/OneDrive - Land Information New Zealand/Desktop/Repo/Output' 
+files = [os.path.join(input_metadata_dir , f) for f in os.listdir(input_metadata_dir ) if f.endswith('.iso.xml')]  # get a list of all .iso files in the Output directory
 
 def extract_guid(file_path):
     try:
@@ -58,7 +58,7 @@ def export_duplicates_to_csv(duplicate_guids, errors):
             writer.writerow(['', file_path, error])
 
 def main():
-    files = [os.path.join(output_dir, f) for f in os.listdir(output_dir) if f.endswith('.iso.xml')]
+    files = [os.path.join(input_metadata_dir , f) for f in os.listdir(input_metadata_dir ) if f.endswith('.iso.xml')]
     duplicate_guids, errors = find_duplicates(files)
     export_duplicates_to_csv(duplicate_guids, errors)
     logging.info("Duplicates exported to duplicates.csv")
