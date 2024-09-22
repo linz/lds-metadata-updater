@@ -54,7 +54,7 @@ class ConfigReader():
             raise FileNotFoundError('Can not find config file')
 
         with open(cwd, 'r') as f:
-            config = yaml.safe_load(f)
+            config = yaml.load(f, Loader=yaml.Loader)
 
         # CONNECTION
         if 'Connection' in config:
@@ -142,10 +142,12 @@ def get_metadata(layer, dir, overwrite):
         file_exists(file_destination)
 
     if layer.metadata != None:
-        layer.metadata.get_xml(file_destination)
-        return file_destination
-    else:
-        return None
+        try:
+            layer.metadata.get_xml(file_destination)
+            return file_destination
+        except Exception as e:
+            logger.error(f"No Metadata Found for: {layer}. Error: {e}")
+
 
 def update_metadata(dest_file, mapping):
     """
@@ -331,15 +333,18 @@ def file_has_text(search_text, ignore_case, file):
     if there are no changes to be made.
     """
 
-    with open(file, 'r') as f:
-        for line in f:
-            if ignore_case:
-                match = re.search(search_text, line, flags=re.IGNORECASE)
-            else:
-                match = re.search(search_text, line)
-            if match:
-                return True
-        return False
+    try:
+        with open(file, 'r') as f:
+            for line in f:
+                if ignore_case:
+                    match = re.search(search_text, line, flags=re.IGNORECASE)
+                else:
+                    match = re.search(search_text, line)
+                if match:
+                    return True
+            return False
+    except FileNotFoundError as e:
+        logger.error(f"File not found: {file}. Error: {e}")
 
 def create_backup(file, overwrite=False):
     """
