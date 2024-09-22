@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "metadata_updater"
+version = "0.0.dev0"
+description = "Edit Data Service metadata"
+authors = [
+    "Megan Davidson <mdavidson@linz.govt.nz>",
+    "Elvira Cheng <echeng@linz.govt.nz>",
+    "Ian Harrison <iharrison@linz.govt.nz>",
+    "Pooja Khosla <pkhosla@linz.govt.nz>"
+]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = ">=2.18.4"
+PyYAML = ">=3.12"
+koordinates = ">=0.4.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

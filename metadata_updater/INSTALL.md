@@ -1,10 +1,9 @@
 # Installation instructions
 
 ## Requirements
-* **Linux** - Operating System. In theory works with others OSs but not tested
 * **Git**   - Source code storage and versioning
-* **Python 3** - Programming language. Version > 3.2 required
-* **setuptools** - download, build, install, upgrade, and uninstall Python packages
+* **Python 3** - Programming language. Version > 3.9 required
+* **Poetry** - [Python packaging and dependency](https://python-poetry.org/)
 
 
 ### Get source code
@@ -20,11 +19,6 @@ change to git dir
 Clone lds-metadata-updater project
 *  `git clone https://github.com/linz/lds-metadata-updater.git`
 
+### Install metadata_updater package
 
-### Setup.py
-
-ensure you are in the lds-metadata-updater project directiry 
-*  `cd ~/git/lds-metadata-updater` 
-
-install metadata_updaer and its dependencies see (requirements.txt)[requirements.txt])
-* `python3 setup.py install`
+`poetry install`

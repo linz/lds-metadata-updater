@@ -104,7 +104,9 @@ the key is to be assigned to must be `LDS_APIKEY=<lds_apikey>`
 ### Execute metadata_update.py
 Once the config.yaml file has been updated simply run
 
-```metadata_updater``` (if installed via the recommended setup.py method)
+```poetry shell```
+
+```metadata_updater```
 
 ### Output
 
