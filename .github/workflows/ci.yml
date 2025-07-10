@@ -30,7 +30,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setup python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python }}
     - name: Install dependencies
@@ -39,7 +39,8 @@ jobs:
         pip install --upgrade setuptools
     - name: Install
       run: |
-        python setup.py install
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
     - name: Run tests
       run: |
         cd tests
