@@ -1,1 +1,4 @@
 config.yaml
+/.venv
+metadata_updater.egg-info
+__pycache__
