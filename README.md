@@ -169,6 +169,7 @@ They can be run locally by:
 * run `pre-commit run --all-files`
 
 This should automatically apply fixes to any files that need formatting.
+Note: if GitHub Actions fails due to formatting issues, you will need to run the above command locally to apply the necessary fixes.
 
 ### Tests
 Unit tests are provided to test all methods not making requests via the Koordinates
