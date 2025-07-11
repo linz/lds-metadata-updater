@@ -12,19 +12,22 @@
 import logging
 import logging.handlers
 
+
 def conf_logging(name):
-    ''' logging '''
+    """logging"""
 
     # CREATE LOGGER
-    log_file = 'metadata_updater.log'
-    log_file_max_size = 1024 * 1024 * 20 # megabytes
+    log_file = "metadata_updater.log"
+    log_file_max_size = 1024 * 1024 * 20  # megabytes
     log_num_backups = 3
     log_format = "%(asctime)s [%(levelname)s]: %(filename)s(%(funcName)s:%(lineno)s) >> %(message)s"
     log_date_format = "%m/%d/%Y %I:%M:%S %p"
-    log_filemode = 'w' # w: overwrite; a: append
+    log_filemode = "w"  # w: overwrite; a: append
 
     # SET UP LOGGER
-    logging.basicConfig(filename=log_file, format=log_format, filemode=log_filemode ,level=logging.DEBUG)
+    logging.basicConfig(
+        filename=log_file, format=log_format, filemode=log_filemode, level=logging.DEBUG
+    )
     rotate_file = logging.handlers.RotatingFileHandler(
         log_file, maxBytes=log_file_max_size, backupCount=log_num_backups
     )
@@ -36,5 +39,5 @@ def conf_logging(name):
     logFormatter = logging.Formatter(log_format)
     consoleHandler.setFormatter(logFormatter)
     logger.addHandler(consoleHandler)
-    
+
     return logger

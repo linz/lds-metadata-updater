@@ -1,8 +1,7 @@
-
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 with open("requirements.txt") as f:
     requirements = f.read().splitlines()
@@ -21,9 +20,7 @@ setup(
     },
     include_package_data=True,
     entry_points={
-        "console_scripts": [
-            "metadata_updater=metadata_updater:main"
-        ],
+        "console_scripts": ["metadata_updater=metadata_updater:main"],
     },
     install_requires=requirements,
     classifiers=[
