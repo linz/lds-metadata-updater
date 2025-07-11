@@ -162,6 +162,14 @@ then publish the layers together as a pulish group.
 This work flow of creating a draft through to publishing is easy enough to
 follow in the source code of this project. 
 
+### Formatting
+Black and isort have been added to this repo. 
+They can be run locally by:
+* Following the [installation steps](metadata_updater/INSTALL.md)
+* run `pre-commit run --all-files`
+
+This should automatically apply fixes to any files that need formatting.
+
 ### Tests
 Unit tests are provided to test all methods not making requests via the Koordinates
 Python client
