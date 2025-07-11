@@ -26,5 +26,15 @@ Clone lds-metadata-updater project
 ensure you are in the lds-metadata-updater project directiry 
 *  `cd ~/git/lds-metadata-updater` 
 
-install metadata_updaer and its dependencies see (requirements.txt)[requirements.txt])
+create a virtual environment
+* `python -m venv .venv`
+* `.venv/scripts/active`
+
+install metadata_update and its dependencies see [requirements.txt](requirements.txt)
+* `python -m pip install --upgrade pip`
+* `pip install -r requirements.txt`
+
+#### DEPRICATED METHOD
+There is no need to create a virtual environment 
+Install metadata_updater and its dependencies see [requirements.txt](requirements.txt)
 * `python3 setup.py install`
