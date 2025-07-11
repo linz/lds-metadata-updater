@@ -28,7 +28,7 @@ ensure you are in the lds-metadata-updater project directiry
 
 create a virtual environment
 * `python -m venv .venv`
-* `.venv/scripts/active`
+* `.\.venv\Scripts\activate`
 
 install metadata_update and its dependencies see [requirements.txt](requirements.txt)
 * `python -m pip install --upgrade pip`
