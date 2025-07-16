@@ -39,7 +39,11 @@ jobs:
         pip install --upgrade setuptools
     - name: Install
       run: |
-        python setup.py install
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Format
+      run: |
+        pre-commit run --all-files
     - name: Run tests
       run: |
         cd tests
